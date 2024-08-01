@@ -11,23 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
-
+    - uses: actions/checkout@v3
     - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: 1.8
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-
     - name: Build with Gradle
-      run: ./gradlew build --info
-
+      run: ./gradlew build
     - name: Build and Push Docker Image
-      uses: mr-smithers-excellent/docker-build-push@v4
+      uses: docker/build-push-action@v3
       with:
-        image: shivank07/demo-app
-        registry: docker.io
+        context: .
+        file: Dockerfile
+        push: true
+        tags: docker.io/***/demo-app:main-5ab6811
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
